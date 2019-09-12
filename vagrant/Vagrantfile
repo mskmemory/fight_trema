@@ -1,0 +1,24 @@
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-16.04"
+  #Vitual boxのケーブル接続設定
+  config.vm.provider "virtualbox" do |vb|
+   vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+  end
+
+  config.vm.define "trema" do |trema|
+    #ホスト名の設定
+    trema.vm.hostname = "trema"
+
+    #ホストOSと通信するIPアドレスの設定
+    trema.vm.network "private_network", ip: "192.168.33.33"
+
+  end
+
+  #ansibleの設定
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/site.yml"
+    ansible.inventory_path = "provisioning/hosts"
+    ansible.limit = 'all'
+  end
+end

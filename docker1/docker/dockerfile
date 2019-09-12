@@ -1,0 +1,29 @@
+FROM ubuntu:16.04
+#User作成
+RUN apt update -y
+RUN apt install  -y
+# RUN adduser --disabled-password --gecos '' docker
+# RUN adduser docker 
+# RUN echo '% ALL=(ALL) NOPASSWD:ALL' >> /etc/ers
+# USER docker
+# CMD /bin/bash
+#環境構築
+RUN  apt install vim git -y
+# RUN  apt install wget
+# RUN  apt install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev  -y
+# RUN  apt install sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev -y
+# ADD ruby_setup.sh /root/
+# RUN ./ruby_setup.sh
+# #rubyの関連アプリをインストール
+WORKDIR /home/docker
+RUN  apt install ruby ruby-dev build-essential -y
+RUN  gem install bundler -v 1.11.2
+# #open　vswtichをインストール
+RUN  apt install openvswitch-switch -y
+# RUN  service openvswitch-switch start
+# #必要ファイルを格納
+ADD hello_trema/ /home/docker/hello_trema/
+WORKDIR /home/docker/hello_trema
+RUN  bundle install --binstubs
+WORKDIR /home/docker/
+# RUN  chown -R docker:docker hello_trema
